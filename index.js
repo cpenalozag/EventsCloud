@@ -4,7 +4,7 @@ const mysql = require("mysql");
 
 const app = express();
 
-const SELECT_ALL_EVENTS_QUERY = "SELECT * FROM EVENTS";
+const SELECT_ALL_EVENTS_QUERY = "SELECT * FROM EVENTST";
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -26,22 +26,39 @@ app.get("/", (req, res) => {
 
 app.get("/events", (req, res) => {
     connection.query(SELECT_ALL_EVENTS_QUERY, (err, results) => {
-        if (err) return res.send(err);
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
         else return res.json(results);
     });
 });
 
 app.get("/events/add", (req, res) => {
     const {name, category, place, address, startDate, endDate, type} = req.query;
-    console.log(name, category, place, address, startDate, endDate, type);
 
-    const INSERT_EVENT_QUERY = `INSERT INTO EVENTS(name,category,place,address,start_date,end_date,type) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}');`;
+    const INSERT_EVENT_QUERY = `INSERT INTO EVENTST(name,category,place,address,start_date,end_date,type) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}');`;
     connection.query(INSERT_EVENT_QUERY, (err, results) => {
         if (err) {
+            console.log(err);
             return res.send(err);
         }
         else {
-            return res.send("Successfully added new event!")
+            return res.send("Successfully added new event")
+        }
+    });
+});
+
+app.get("/events/delete", (req, res) => {
+    const id = parseInt(req.query['id']);
+    const DELETE_EVENT_QUERY = `DELETE FROM EVENTST WHERE id=${id};`;
+    connection.query(DELETE_EVENT_QUERY, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+        else {
+            return res.send("Successfully deleted the event")
         }
     });
 });

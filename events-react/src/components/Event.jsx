@@ -27,6 +27,7 @@ class Event extends Component {
                             <strong>End date:</strong> {event.end_date}
                             <br />
                         </Typography>
+                        <button value={event.id} onClick={this.props.onDelete}>Borrar</button>
                     </CardContent>
                 </Card>
             </div>

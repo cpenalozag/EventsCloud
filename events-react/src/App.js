@@ -16,11 +16,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
-
 import './App.css';
 
 import Event from "./components/Event";
-
 
 
 const theme = createMuiTheme({
@@ -34,18 +32,25 @@ const theme = createMuiTheme({
 
 class App extends Component {
 
-    state = {
-        events: [],
-        event: {
-            name: "",
-            category: "",
-            place: "",
-            address: "",
-            startDate: new Date('2018-08-18T21:11:54'),
-            endDate: new Date('2018-08-19T21:26:35'),
-            type: ""
+    constructor(props) {
+        super(props);
+        this.state = {
+            events: [],
+            event: {
+                name: "",
+                category: "",
+                place: "",
+                address: "",
+                startDate: new Date('2018-08-18T21:11:54'),
+                endDate: new Date('2018-08-19T21:26:35'),
+                type: ""
+            }
         }
+        this.addEvent = this.addEvent.bind(this)
+        this.getEvents = this.getEvents.bind(this)
+        this.deleteEvent = this.deleteEvent.bind(this)
     }
+
 
     componentDidMount() {
         this.getEvents();
@@ -59,9 +64,14 @@ class App extends Component {
     }
 
     addEvent() {
-        const {event} = this.state;
-        fetch(`http://localhost:4000/events/add?name=${event.name}&category=${event.category}&place=${event.place}&address=${event.address}&startDate=${event.startDate}&endDate=${event.endDate}&type=${event.type}`)
-            .then(response => response.json())
+        const event = this.state.event;
+        fetch(`http://localhost:4000/events/add?name=${event.name}&category=${event.category}&place=${event.place}&address=${event.address}&startDate=${event.startDate.toDateString()}&endDate=${event.endDate.toDateString()}&type=${event.type}`)
+            .then(this.getEvents)
+            .catch(err => console.error(err))
+    }
+
+    deleteEvent(e) {
+        fetch(`http://localhost:4000/events/delete?id=${e.target.value}`)
             .then(this.getEvents)
             .catch(err => console.error(err))
     }
@@ -69,15 +79,13 @@ class App extends Component {
     renderEvents() {
         return this.state.events.map((event) => {
             return (
-                <Event key={event.id} event={event}/>
+                <Event key={event.id} event={event} onDelete={this.deleteEvent.bind(this)}/>
             );
         })
     }
 
     render() {
         const event = this.state.event;
-        console.log(event);
-        console.log(this.state.events)
         return (
             <div className="App">
                 <MuiThemeProvider theme={theme}>
@@ -109,10 +117,10 @@ class App extends Component {
                                        onChange={e => this.setState({event: {...event, category: e.target.value}})}
                                        style={{width: 200}}
                                    >
-                                       <MenuItem value={"conferencia"}>Conferencia</MenuItem>
-                                       <MenuItem value={"seminario"}>Seminario</MenuItem>
-                                       <MenuItem value={"congreso"}>Congreso</MenuItem>
-                                       <MenuItem value={"curso"}>Curso</MenuItem>
+                                       <MenuItem value={"Conferencia"}>Conferencia</MenuItem>
+                                       <MenuItem value={"Seminario"}>Seminario</MenuItem>
+                                       <MenuItem value={"Congreso"}>Congreso</MenuItem>
+                                       <MenuItem value={"Curso"}>Curso</MenuItem>
                                    </Select>
                                </FormControl>
 
@@ -139,8 +147,8 @@ class App extends Component {
                                        onChange={e => this.setState({event: {...event, type: e.target.value}})}
                                        style={{width: 200}}
                                    >
-                                       <MenuItem value={"virtual"}>Virtual</MenuItem>
-                                       <MenuItem value={"presencial"}>Presencial</MenuItem>
+                                       <MenuItem value={"Virtual"}>Virtual</MenuItem>
+                                       <MenuItem value={"Presencial"}>Presencial</MenuItem>
                                    </Select>
                                </FormControl>
 
@@ -176,7 +184,7 @@ class App extends Component {
 
                         <br/>
 
-                        <Button onClick={console.log("click")} variant="contained" color="primary" >
+                        <Button onClick={this.addEvent} variant="contained" color="primary" >
                             Guardar
                         </Button>
 
