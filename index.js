@@ -1,10 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
+var passport = require("passport");
 
 const app = express();
 
-const SELECT_ALL_EVENTS_QUERY = "SELECT * FROM EVENTST";
+const SELECT_ALL_EVENTS_QUERY = "SELECT id,name,category,place,created_at FROM EVENTST ORDER BY created_at";
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -19,6 +20,9 @@ connection.connect(err => {
 
 
 app.use(cors());
+app.use(passport.initialize());
+require("./config/passport");
+
 
 app.get("/", (req, res) => {
     res.send("Go to /events to see the event list");
@@ -33,6 +37,20 @@ app.get("/events", (req, res) => {
         else return res.json(results);
     });
 });
+
+app.get("/events/detail", (req, res) => {
+    const id = parseInt(req.query['id']);
+    const GET_DETAIL_QUERY = `SELECT * FROM EVENTST WHERE id=${id};`;
+    connection.query(GET_DETAIL_QUERY, (err, results) => {
+        if (err) {
+            return res.send(err);
+        }
+        else {
+            return res.send(results)
+        }
+    });
+});
+
 
 app.get("/events/add", (req, res) => {
     const {name, category, place, address, startDate, endDate, type} = req.query;

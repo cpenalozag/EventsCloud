@@ -2,6 +2,9 @@
   text-align: center;
   height: 100%;
 }
+.details {
+  text-align: center;
+}
 .card {
   margin-bottom: 20px;
 }
