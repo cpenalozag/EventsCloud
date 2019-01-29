@@ -29,7 +29,6 @@ class EventDetail extends Component {
 
     updateEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
-        console.log(name, category, place, address, startDate, endDate, type);
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
         else fetch(`http://localhost:4000/events/update?id=${this.props.match.params.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
             .then(this.getEvents, alert("The event was updated"))
@@ -49,7 +48,6 @@ class EventDetail extends Component {
                     endDate: data[0].end_date,
                     type: data[0].type,
                 });
-                console.log(data)
             })
             .catch(err => console.error(err))
     }
@@ -60,7 +58,6 @@ class EventDetail extends Component {
 
 
     render() {
-        console.log(this.state);
         return (
             <div className="details jumbotron">
 
