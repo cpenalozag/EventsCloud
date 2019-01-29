@@ -5,7 +5,7 @@ var passport = require("passport");
 
 const app = express();
 
-const SELECT_ALL_EVENTS_QUERY = "SELECT id,name,category,place,created_at FROM EVENTST ORDER BY created_at";
+const SELECT_ALL_EVENTS_QUERY = "SELECT id,name,category,place,created_at FROM EVENTST ORDER BY created_at DESC";
 
 const connection = mysql.createConnection({
     host: "localhost",

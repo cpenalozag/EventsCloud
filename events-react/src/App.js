@@ -34,6 +34,14 @@ class App extends Component {
         this.setState({[event.target.name]: event.target.value});
     };
 
+    handleStartDateChange = date => {
+        this.setState({startDate: date});
+    };
+
+    handleEndDateChange = date => {
+        this.setState({endDate: date});
+    };
+
     getEvents() {
         fetch("http://localhost:4000/events")
             .then(response => response.json())
@@ -69,7 +77,9 @@ class App extends Component {
 
 
                 <AddEvent handleChange={this.handleChange.bind(this)}
-                          addEvent={this.addEvent.bind(this)} {...this.state}/>
+                          addEvent={this.addEvent.bind(this)}
+                          handleStartDateChange={this.handleStartDateChange.bind(this)}
+                          handleEndDateChange={this.handleEndDateChange.bind(this)} {...this.state}/>
 
                 <div className="container">
                     <div className="row">

@@ -81,25 +81,25 @@ class AddEvent extends Component {
                                 label="Start Date"
                                 name={"startDate"}
                                 value={this.props.startDate}
-                                onChange={this.props.handleChange}
+                                onChange={this.props.handleStartDateChange}
                             />
                             <TimePicker
                                 label="Start Time"
                                 name="startDate"
                                 value={this.props.startDate}
-                                onChange={this.props.handleChange}
+                                onChange={this.props.handleStartDateChange}
                             />
                             <DatePicker
                                 label="End Date"
                                 name={"endDate"}
                                 value={this.props.endDate}
-                                onChange={this.props.handleChange}
+                                onChange={this.props.handleEndDateChange}
                             />
                             <TimePicker
                                 label="End Time"
                                 name={"endDate"}
                                 value={this.props.endDate}
-                                onChange={this.props.handleChange}
+                                onChange={this.props.handleEndDateChange}
                             />
                         </Grid>
                     </MuiPickersUtilsProvider>

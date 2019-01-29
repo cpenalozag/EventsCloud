@@ -29,21 +29,23 @@ class EventDetail extends Component {
     getEvent(id) {
         fetch(`http://localhost:4000/events/detail?id=${id}`)
             .then(response => response.json())
-            .then(data => this.setState({
+            .then(data => {this.setState({
                 name: data[0].name,
                 category: data[0].category,
                 place: data[0].place,
                 address: data[0].address,
-                startDate: data[0].startDate,
-                endDate: data[0].endDate,
+                startDate: data[0].start_date,
+                endDate: data[0].end_date,
                 type: data[0].type,
-            }))
+            });
+            console.log(data)})
             .catch(err => console.error(err))
     }
 
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value});
     };
+
 
     render() {
         console.log(this.state);
@@ -118,25 +120,25 @@ class EventDetail extends Component {
                                 label="Start Date"
                                 name={"startDate"}
                                 value={this.state.startDate}
-                                onChange={this.handleChange}
+                                onChange={date => this.setState({ startDate: date})}
                             />
                             <TimePicker
                                 label="Start Time"
                                 name="startDate"
                                 value={this.state.startDate}
-                                onChange={this.handleChange}
+                                onChange={date => this.setState({ startDate: date})}
                             />
                             <DatePicker
                                 label="End Date"
                                 name={"endDate"}
                                 value={this.state.endDate}
-                                onChange={this.handleChange}
+                                onChange={date => this.setState({ endDate: date})}
                             />
                             <TimePicker
                                 label="End Time"
                                 name={"endDate"}
                                 value={this.state.endDate}
-                                onChange={this.handleChange}
+                                onChange={date => this.setState({ endDate: date})}
                             />
                         </Grid>
                     </MuiPickersUtilsProvider>
