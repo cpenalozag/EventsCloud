@@ -52,7 +52,7 @@ class App extends Component {
     addEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
-        else fetch(`http://localhost:4000/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate.toDateString().concat(" ", startDate.toTimeString())}&endDate=${endDate.toDateString().concat(" ", startDate.toTimeString())}&type=${type}`)
+        else fetch(`http://localhost:4000/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
             .then(this.getEvents)
             .catch(err => console.error(err))
     }

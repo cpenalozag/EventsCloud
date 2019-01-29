@@ -11,7 +11,7 @@ import DateFnsUtils from "@date-io/date-fns";
 class EventDetail extends Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             name: "",
             category: "",
             place: "",
@@ -20,25 +20,37 @@ class EventDetail extends Component {
             endDate: new Date('2018-08-19T21:26:35'),
             type: ""
         }
+        this.updateEvent = this.updateEvent.bind(this);
     }
 
     componentDidMount() {
         this.getEvent(this.props.match.params.id);
     }
 
+    updateEvent() {
+        const {name, category, place, address, startDate, endDate, type} = this.state;
+        console.log(name, category, place, address, startDate, endDate, type);
+        if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
+        else fetch(`http://localhost:4000/events/update?id=${this.props.match.params.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+            .then(this.getEvents, alert("The event was updated"))
+            .catch(err => console.error(err))
+    }
+
     getEvent(id) {
         fetch(`http://localhost:4000/events/detail?id=${id}`)
             .then(response => response.json())
-            .then(data => {this.setState({
-                name: data[0].name,
-                category: data[0].category,
-                place: data[0].place,
-                address: data[0].address,
-                startDate: data[0].start_date,
-                endDate: data[0].end_date,
-                type: data[0].type,
-            });
-            console.log(data)})
+            .then(data => {
+                this.setState({
+                    name: data[0].name,
+                    category: data[0].category,
+                    place: data[0].place,
+                    address: data[0].address,
+                    startDate: data[0].start_date,
+                    endDate: data[0].end_date,
+                    type: data[0].type,
+                });
+                console.log(data)
+            })
             .catch(err => console.error(err))
     }
 
@@ -120,25 +132,25 @@ class EventDetail extends Component {
                                 label="Start Date"
                                 name={"startDate"}
                                 value={this.state.startDate}
-                                onChange={date => this.setState({ startDate: date})}
+                                onChange={date => this.setState({startDate: date})}
                             />
                             <TimePicker
                                 label="Start Time"
                                 name="startDate"
                                 value={this.state.startDate}
-                                onChange={date => this.setState({ startDate: date})}
+                                onChange={date => this.setState({startDate: date})}
                             />
                             <DatePicker
                                 label="End Date"
                                 name={"endDate"}
                                 value={this.state.endDate}
-                                onChange={date => this.setState({ endDate: date})}
+                                onChange={date => this.setState({endDate: date})}
                             />
                             <TimePicker
                                 label="End Time"
                                 name={"endDate"}
                                 value={this.state.endDate}
-                                onChange={date => this.setState({ endDate: date})}
+                                onChange={date => this.setState({endDate: date})}
                             />
                         </Grid>
                     </MuiPickersUtilsProvider>
@@ -146,7 +158,7 @@ class EventDetail extends Component {
 
                 <br/>
 
-                <button onClick={this.props.addEvent} className="btn btn-primary">
+                <button onClick={this.updateEvent} className="btn btn-primary">
                     Update details
                 </button>
 

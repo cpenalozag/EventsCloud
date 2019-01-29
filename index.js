@@ -67,6 +67,21 @@ app.get("/events/add", (req, res) => {
     });
 });
 
+app.get("/events/update", (req, res) => {
+    const {id, name, category, place, address, startDate, endDate, type} = req.query;
+
+    const UPDATE_EVENT_QUERY = `UPDATE EVENTST SET name='${name}', category='${category}', place='${place}', address='${address}', start_date='${startDate}', end_date='${endDate}', type='${type}' WHERE id=${id};`;
+    connection.query(UPDATE_EVENT_QUERY, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+        else {
+            return res.send("Successfully updated the event")
+        }
+    });
+});
+
 app.get("/events/delete", (req, res) => {
     const id = parseInt(req.query['id']);
     const DELETE_EVENT_QUERY = `DELETE FROM EVENTST WHERE id=${id};`;
