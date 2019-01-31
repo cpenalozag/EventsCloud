@@ -95,7 +95,7 @@ class SignIn extends Component {
         e.preventDefault();
 
         //Add this part right here
-        axios.post("/signup", {
+        axios.post("/API/signup", {
             email: this.state.email,
             password: this.state.password
         }, {
