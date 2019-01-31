@@ -71,7 +71,6 @@ class SignIn extends Component {
     Auth = new AuthHelperMethods();
 
     componentDidMount() {
-        console.log(this.Auth.loggedIn());
         if(this.Auth.loggedIn()){
             this.props.history.push('/')
         }
@@ -105,8 +104,12 @@ class SignIn extends Component {
             }
         })
             .then(data => {
-                console.log(data);
+                console.log("a",data);
+                alert("The account was created successfully!");
                 this.props.history.replace("/login");
+            })
+            .catch(err => {
+                alert("There was an error creating your account");
             });
     };
 

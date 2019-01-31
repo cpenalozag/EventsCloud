@@ -35,7 +35,11 @@ class Home extends Component {
 
 
     componentDidMount() {
-        this.getEvents();
+        let userInfo = this.Auth.getConfirm();
+        this.setState({
+            email: userInfo.email
+        })
+        this.setState(({email:userInfo.email}), ()=>this.getEvents() );
     }
 
     handleChange = event => {
@@ -56,7 +60,8 @@ class Home extends Component {
     }
 
     getEvents() {
-        fetch("http://localhost:4000/events")
+        console.log(this.state);
+        fetch(`http://localhost:4000/events?email=${this.state.email}`)
             .then(response => response.json())
             .then(data => this.setState({events: data}))
             .catch(err => console.error(err))
@@ -65,7 +70,7 @@ class Home extends Component {
     addEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
-        else fetch(`http://localhost:4000/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+        else fetch(`http://localhost:4000/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}&email=${this.state.email}`)
             .then(this.getEvents)
             .catch(err => console.error(err))
     }
@@ -99,7 +104,8 @@ class Home extends Component {
                     </Toolbar>
                 </AppBar>
 
-                <AddEvent handleChange={this.handleChange.bind(this)}
+                <AddEvent email={this.state.email}
+                          handleChange={this.handleChange.bind(this)}
                           addEvent={this.addEvent.bind(this)}
                           handleStartDateChange={this.handleStartDateChange.bind(this)}
                           handleEndDateChange={this.handleEndDateChange.bind(this)}

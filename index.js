@@ -25,7 +25,6 @@ const jwtMW = exjwt({
     secret: 'a'
 });
 
-const SELECT_ALL_EVENTS_QUERY = "SELECT id,name,category,place,created_at FROM EVENTST ORDER BY created_at DESC";
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -47,6 +46,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/events", (req, res) => {
+    const {email} = req.query;
+    const SELECT_ALL_EVENTS_QUERY = `SELECT id,name,category,place,created_at FROM EVENTST WHERE email='${email}' ORDER BY created_at DESC`;
     connection.query(SELECT_ALL_EVENTS_QUERY, (err, results) => {
         if (err) return res.send(err);
         else return res.json(results);
@@ -64,11 +65,14 @@ app.get("/events/detail", (req, res) => {
 
 
 app.get("/events/add", (req, res) => {
-    const {name, category, place, address, startDate, endDate, type} = req.query;
+    const {name, category, place, address, startDate, endDate, type, email} = req.query;
 
-    const INSERT_EVENT_QUERY = `INSERT INTO EVENTST(name,category,place,address,start_date,end_date,type) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}');`;
+    const INSERT_EVENT_QUERY = `INSERT INTO EVENTST(name,category,place,address,start_date,end_date,type, email) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}', '${email}');`;
     connection.query(INSERT_EVENT_QUERY, (err, results) => {
-        if (err)  return res.send(err);
+        if (err)  {
+            console.log(err);
+            return res.send(err);
+        }
         else return res.send("Successfully added new event")
     });
 });
@@ -95,12 +99,11 @@ app.get("/events/delete", (req, res) => {
 app.post('/signup', (req, res) => {
     const { email, password } = req.body;
     const saltRounds = 10;
-    console.log("Registered: ", email, password)
     bcrypt.hash(password, saltRounds, function (err, hash) {
         const INSERT_USER_QUERY = `INSERT INTO USERS(email, password) VALUES ('${email}', '${hash}');`;
         connection.query(INSERT_USER_QUERY, (err, results) => {
             if (err)  {
-                return res.send(err);
+                return res.send(400);
             }
             else return res.send("Successfully added new user")
         });
@@ -109,7 +112,6 @@ app.post('/signup', (req, res) => {
 
 app.post('/log-in', (req, res) => {
     const { email, password } = req.body;
-    console.log("User submitted: ", email, password);
 
     const GET_USER_QUERY = `SELECT * FROM USERS WHERE email='${email}';`;
     connection.query(GET_USER_QUERY, (err, results) => {
@@ -124,7 +126,7 @@ app.post('/log-in', (req, res) => {
                 bcrypt.compare(password, user[0].password, function(err, result) {
                     if(result === true){
                         console.log("Valid!");
-                        let token = jwt.sign({ email: user.email }, 'a', { expiresIn: 129600 }); // Signing the token
+                        let token = jwt.sign({ email: user[0].email }, 'a', { expiresIn: 129600 }); // Signing the token
                         res.json({
                             sucess: true,
                             err: null,
@@ -132,7 +134,6 @@ app.post('/log-in', (req, res) => {
                         });
                     }
                     else {
-                        console.log("aaa",result)
                         console.log("Entered Password and Hash do not match!");
                         res.status(401).json({
                             sucess: false,

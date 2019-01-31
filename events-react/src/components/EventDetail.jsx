@@ -18,6 +18,7 @@ class EventDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: -1,
             name: "",
             category: "",
             place: "",
@@ -32,14 +33,15 @@ class EventDetail extends Component {
 
     componentDidMount() {
         let parts = this.props.history.location.pathname.split("/");
-        const id = parseInt(parts[parts.length-1])
+        const id = parseInt(parts[parts.length-1]);
+        this.setState({id:id});
         this.getEvent(id);
     }
 
     updateEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
-        else fetch(`http://localhost:4000/events/update?id=${this.props.match.params.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+        else fetch(`http://localhost:4000/events/update?id=${this.state.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
             .then(this.getEvents, alert("The event was updated"))
             .catch(err => console.error(err))
     }
