@@ -4,7 +4,7 @@ export default class AuthHelperMethods {
 
     login = (email, password) => {
         // Get a token from api server using the fetch api
-        return this.fetch("/API/log-in", {
+        return this.fetch("/log-in", {
             method: "POST",
             body: JSON.stringify({
                 email,

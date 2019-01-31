@@ -40,13 +40,13 @@ class EventDetail extends Component {
     updateEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
-        else fetch(`/API/events/update?id=${this.state.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
+        else fetch(`/events/update?id=${this.state.id}&name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}`)
             .then(this.getEvents, alert("The event was updated"))
             .catch(err => console.error(err))
     }
 
     getEvent(id) {
-        fetch(`/API/events/detail?id=${id}&email=${this.props.confirm.email}`)
+        fetch(`/events/detail?id=${id}&email=${this.props.confirm.email}`)
             .then(response => response.json())
             .then(data => {
                 if (data[0]){
