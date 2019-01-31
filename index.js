@@ -56,10 +56,16 @@ app.get("/events", (req, res) => {
 
 app.get("/events/detail", (req, res) => {
     const id = parseInt(req.query['id']);
-    const GET_DETAIL_QUERY = `SELECT * FROM EVENTST WHERE id=${id};`;
+    const email = req.query['email'];
+    const GET_DETAIL_QUERY = `SELECT * FROM EVENTST WHERE id=${id} and email='${email}';`;
     connection.query(GET_DETAIL_QUERY, (err, results) => {
-        if (err) return res.send(err);
-        else return res.send(results)
+        if (err) {
+            console.log(err);
+            return res.send(err);
+        }
+        else {
+            return res.send(results);
+        }
     });
 });
 
@@ -70,7 +76,6 @@ app.get("/events/add", (req, res) => {
     const INSERT_EVENT_QUERY = `INSERT INTO EVENTST(name,category,place,address,start_date,end_date,type, email) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}', '${email}');`;
     connection.query(INSERT_EVENT_QUERY, (err, results) => {
         if (err)  {
-            console.log(err);
             return res.send(err);
         }
         else return res.send("Successfully added new event")
@@ -103,7 +108,7 @@ app.post('/signup', (req, res) => {
         const INSERT_USER_QUERY = `INSERT INTO USERS(email, password) VALUES ('${email}', '${hash}');`;
         connection.query(INSERT_USER_QUERY, (err, results) => {
             if (err)  {
-                return res.send(400);
+                return res.send(err);
             }
             else return res.send("Successfully added new user")
         });

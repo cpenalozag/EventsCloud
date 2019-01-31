@@ -95,7 +95,7 @@ class SignIn extends Component {
         e.preventDefault();
 
         //Add this part right here
-        axios.post("http://localhost:4000/signup", {
+        axios.post("http://172.24.42.22:4000/signup", {
             email: this.state.email,
             password: this.state.password
         }, {
@@ -104,7 +104,6 @@ class SignIn extends Component {
             }
         })
             .then(data => {
-                console.log("a",data);
                 alert("The account was created successfully!");
                 this.props.history.replace("/login");
             })
