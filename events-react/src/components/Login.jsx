@@ -95,7 +95,7 @@ class SignIn extends Component {
         e.preventDefault();
 
         //Add this part right here
-        axios.post("http://172.24.42.22:4000/signup", {
+        axios.post("http://172.24.42.22:8500/signup", {
             email: this.state.email,
             password: this.state.password
         }, {
