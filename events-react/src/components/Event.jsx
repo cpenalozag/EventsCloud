@@ -8,13 +8,13 @@ import { Link } from 'react-router-dom';
 
 class Event extends Component {
     render() {
-        const {event} = this.props;
+        const {event,email} = this.props;
         return (
             <div className="col-md-4">
 
                     <Card className={"card"}>
                         <CardContent>
-                            <Link to={`/events/${event.id}`} query={{id:event.id}} style={{ textDecoration: 'none' }}>
+                            <Link to={`/events/${event.id}`} query={{id:event.id, email:email}} style={{ textDecoration: 'none' }}>
                             <Typography variant="h4" component="h3">
                                 {event.name}
                             </Typography>

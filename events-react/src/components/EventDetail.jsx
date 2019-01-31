@@ -47,20 +47,27 @@ class EventDetail extends Component {
     }
 
     getEvent(id) {
-        fetch(`http://localhost:4000/events/detail?id=${id}`)
+        fetch(`http://localhost:4000/events/detail?id=${id}&email=${this.props.confirm.email}`)
             .then(response => response.json())
             .then(data => {
-                this.setState({
-                    name: data[0].name,
-                    category: data[0].category,
-                    place: data[0].place,
-                    address: data[0].address,
-                    startDate: data[0].start_date,
-                    endDate: data[0].end_date,
-                    type: data[0].type,
-                });
+                if (data[0]){
+                    this.setState({
+                        name: data[0].name,
+                        category: data[0].category,
+                        place: data[0].place,
+                        address: data[0].address,
+                        startDate: data[0].start_date,
+                        endDate: data[0].end_date,
+                        type: data[0].type,
+                    });
+                }
+                else {
+                    this.props.history.push('/events');
+                }
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err);
+            })
     }
 
     handleChange = event => {
@@ -69,7 +76,6 @@ class EventDetail extends Component {
 
 
     render() {
-        console.log(this.props)
         return (
             <div>
                 <AppBar position="static">

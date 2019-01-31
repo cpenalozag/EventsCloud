@@ -84,7 +84,7 @@ class Home extends Component {
     renderEvents() {
         return this.state.events.map((event) => {
             return (
-                <Event key={event.id} event={event} onDelete={this.deleteEvent.bind(this)}/>
+                <Event key={event.id} event={event} email={this.state.email} onDelete={this.deleteEvent.bind(this)}/>
             );
         })
     }
