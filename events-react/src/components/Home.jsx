@@ -60,7 +60,6 @@ class Home extends Component {
     }
 
     getEvents() {
-        console.log(this.state);
         fetch(`http://localhost:4000/events?email=${this.state.email}`)
             .then(response => response.json())
             .then(data => this.setState({events: data}))

@@ -126,7 +126,7 @@ app.post('/log-in', (req, res) => {
         }
         else {
             const user = results;
-            if (user===null) res.json(false);
+            if (!user||!user[0]) res.json(false);
             else {
                 bcrypt.compare(password, user[0].password, function(err, result) {
                     if(result === true){
@@ -152,4 +152,4 @@ app.post('/log-in', (req, res) => {
     });
 });
 
-app.listen(8500, () => console.log("Server listening on port 8500"));
+app.listen(5000, () => console.log("Server listening on port 5000"));

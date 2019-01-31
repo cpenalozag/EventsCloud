@@ -1,14 +1,10 @@
 import decode from "jwt-decode";
 
 export default class AuthHelperMethods {
-    // Initializing important variables
-    constructor(domain) {
-        //THIS LINE IS ONLY USED WHEN YOU'RE IN PRODUCTION MODE!
-        this.domain = domain || "http://localhost:4000"; // API server domain
-    }
+
     login = (email, password) => {
         // Get a token from api server using the fetch api
-        return this.fetch("http://localhost:4000/log-in", {
+        return this.fetch("/log-in", {
             method: "POST",
             body: JSON.stringify({
                 email,

@@ -95,7 +95,7 @@ class SignIn extends Component {
         e.preventDefault();
 
         //Add this part right here
-        axios.post("http://172.24.42.22:8500/signup", {
+        axios.post("/signup", {
             email: this.state.email,
             password: this.state.password
         }, {
@@ -123,12 +123,9 @@ class SignIn extends Component {
                 [e.target.name]: e.target.value
             }
         )
-
-        console.log(this.state);
     }
 
     render() {
-        console.log(this.state)
         const { value } = this.state;
         return (
             <main className={this.classes.main}>
