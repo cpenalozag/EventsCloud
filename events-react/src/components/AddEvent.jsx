@@ -9,6 +9,7 @@ import {DatePicker, MuiPickersUtilsProvider, TimePicker} from "material-ui-picke
 import DateFnsUtils from "@date-io/date-fns";
 
 class AddEvent extends Component {
+
     render() {
         return (
             <div className="jumbotron">

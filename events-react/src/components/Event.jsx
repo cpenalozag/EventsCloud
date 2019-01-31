@@ -14,7 +14,7 @@ class Event extends Component {
 
                     <Card className={"card"}>
                         <CardContent>
-                            <Link to={`/events/${event.id}`} style={{ textDecoration: 'none' }}>
+                            <Link to={`/events/${event.id}`} query={{id:event.id}} style={{ textDecoration: 'none' }}>
                             <Typography variant="h4" component="h3">
                                 {event.name}
                             </Typography>
