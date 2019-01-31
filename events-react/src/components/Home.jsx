@@ -60,7 +60,7 @@ class Home extends Component {
     }
 
     getEvents() {
-        fetch(`http://localhost:4000/events?email=${this.state.email}`)
+        fetch(`/API/events?email=${this.state.email}`)
             .then(response => response.json())
             .then(data => this.setState({events: data}))
             .catch(err => console.error(err))
@@ -69,13 +69,13 @@ class Home extends Component {
     addEvent() {
         const {name, category, place, address, startDate, endDate, type} = this.state;
         if (name.length === 0 || category.length === 0 || place.length === 0 || address.length === 0 || type.length === 0) alert("Please fill out all the fields");
-        else fetch(`http://localhost:4000/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}&email=${this.state.email}`)
+        else fetch(`/API/events/add?name=${name}&category=${category}&place=${place}&address=${address}&startDate=${startDate}&endDate=${endDate}&type=${type}&email=${this.state.email}`)
             .then(this.getEvents)
             .catch(err => console.error(err))
     }
 
     deleteEvent(e) {
-        fetch(`http://localhost:4000/events/delete?id=${e.target.value}`)
+        fetch(`/API/events/delete?id=${e.target.value}`)
             .then(this.getEvents)
             .catch(err => console.error(err))
     }

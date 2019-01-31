@@ -41,11 +41,7 @@ connection.connect(err => {
 app.use(cors());
 
 
-app.get("/", (req, res) => {
-    res.send("Go to /events to see the event list");
-});
-
-app.get("/events", (req, res) => {
+app.get("/API/events", (req, res) => {
     const {email} = req.query;
     const SELECT_ALL_EVENTS_QUERY = `SELECT id,name,category,place,created_at FROM EVENTST WHERE email='${email}' ORDER BY created_at DESC`;
     connection.query(SELECT_ALL_EVENTS_QUERY, (err, results) => {
@@ -54,7 +50,7 @@ app.get("/events", (req, res) => {
     });
 });
 
-app.get("/events/detail", (req, res) => {
+app.get("/API/events/detail", (req, res) => {
     const id = parseInt(req.query['id']);
     const email = req.query['email'];
     const GET_DETAIL_QUERY = `SELECT * FROM EVENTST WHERE id=${id} and email='${email}';`;
@@ -70,7 +66,7 @@ app.get("/events/detail", (req, res) => {
 });
 
 
-app.get("/events/add", (req, res) => {
+app.get("/API/events/add", (req, res) => {
     const {name, category, place, address, startDate, endDate, type, email} = req.query;
 
     const INSERT_EVENT_QUERY = `INSERT INTO EVENTST(name,category,place,address,start_date,end_date,type, email) VALUES ('${name}', '${category}', '${place}', '${address}', '${startDate}', '${endDate}', '${type}', '${email}');`;
@@ -82,7 +78,7 @@ app.get("/events/add", (req, res) => {
     });
 });
 
-app.get("/events/update", (req, res) => {
+app.get("/API/events/update", (req, res) => {
     const {id, name, category, place, address, startDate, endDate, type} = req.query;
 
     const UPDATE_EVENT_QUERY = `UPDATE EVENTST SET name='${name}', category='${category}', place='${place}', address='${address}', start_date='${startDate}', end_date='${endDate}', type='${type}' WHERE id=${id};`;
@@ -92,7 +88,7 @@ app.get("/events/update", (req, res) => {
     });
 });
 
-app.get("/events/delete", (req, res) => {
+app.get("/API/events/delete", (req, res) => {
     const id = parseInt(req.query['id']);
     const DELETE_EVENT_QUERY = `DELETE FROM EVENTST WHERE id=${id};`;
     connection.query(DELETE_EVENT_QUERY, (err, results) => {
@@ -101,7 +97,7 @@ app.get("/events/delete", (req, res) => {
     });
 });
 
-app.post('/signup', (req, res) => {
+app.post('/API/signup', (req, res) => {
     const { email, password } = req.body;
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, function (err, hash) {
@@ -115,7 +111,7 @@ app.post('/signup', (req, res) => {
     });
 });
 
-app.post('/log-in', (req, res) => {
+app.post('/API/log-in', (req, res) => {
     const { email, password } = req.body;
 
     const GET_USER_QUERY = `SELECT * FROM USERS WHERE email='${email}';`;
@@ -152,4 +148,4 @@ app.post('/log-in', (req, res) => {
     });
 });
 
-app.listen(5000, () => console.log("Server listening on port 5000"));
+app.listen(8080, () => console.log("Server listening on port 8080"));
