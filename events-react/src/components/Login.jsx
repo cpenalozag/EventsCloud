@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,6 +9,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+import axios from 'axios';
+
+import AuthHelperMethods from './AuthHelperMethods';
 
 const styles = theme => ({
     main: {
@@ -29,9 +34,10 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        textAlign: 'center'
     },
     avatar: {
-        margin: theme.spacing.unit,
+        margin: 'auto',
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
@@ -43,45 +49,153 @@ const styles = theme => ({
     },
 });
 
-function SignIn(props) {
-    const { classes } = props;
-
+function TabContainer(props) {
     return (
-        <main className={classes.main}>
-            <CssBaseline />
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form className={classes.form}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">Email Address</InputLabel>
-                        <Input id="email" name="email" autoComplete="email" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <Input name="password" type="password" id="password" autoComplete="current-password" />
-                    </FormControl>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign in
-                    </Button>
-                </form>
-            </Paper>
-        </main>
+        <span  style={{ padding: 8 * 3 }}>
+            {props.children}
+        </span>
     );
 }
 
-SignIn.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
+class SignIn extends Component {
+    constructor(props) {
+        super(props);
+        this.classes = props.classes;
+        this.state = {
+            value: 0,
+            email: "",
+            password: ""
+        };
+    }
+
+    Auth = new AuthHelperMethods();
+
+    componentDidMount() {
+        console.log(this.Auth.loggedIn());
+        if(this.Auth.loggedIn()){
+            this.props.history.push('/')
+        }
+    }
+
+    handleLogin = e => {
+        e.preventDefault();
+        /* Here is where all the login logic will go. Upon clicking the login button, we would like to utilize a login method that will send our entered credentials over to the server for verification. Once verified, it should store your token and send you to the protected route. */
+        this.Auth.login(this.state.email, this.state.password)
+            .then(res => {
+                if (res === false) {
+                    return alert("Sorry those credentials don't exist!");
+                }
+                this.props.history.replace("/");
+            })
+            .catch(err => {
+                alert(err);
+            });
+    };
+
+    handleSignup = e => {
+        e.preventDefault();
+
+        //Add this part right here
+        axios.post("http://localhost:4000/signup", {
+            email: this.state.email,
+            password: this.state.password
+        }, {
+            headers: {
+                'content-type': 'application/json',
+            }
+        })
+            .then(data => {
+                console.log(data);
+                this.props.history.replace("/login");
+            });
+    };
+
+    handleTabChange = (event, value) => {
+        this.setState({ value });
+    };
+
+    handleChange = (e) => {
+
+        this.setState(
+            {
+                [e.target.name]: e.target.value
+            }
+        )
+
+        console.log(this.state);
+    }
+
+    render() {
+        console.log(this.state)
+        const { value } = this.state;
+        return (
+            <main className={this.classes.main}>
+                <CssBaseline />
+                <Paper className={this.classes.paper}>
+                    <Tabs value={value} onChange={this.handleTabChange}>
+                        <Tab label="Log In" />
+                        <Tab label="Sign Up" />
+                    </Tabs>
+                    {value === 0 && <TabContainer>
+                        <Avatar className={this.classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Log In
+                        </Typography>
+                        <form className={this.classes.form}>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Email Address</InputLabel>
+                                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange} />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange}/>
+                            </FormControl>
+                            <Button
+                                onClick={this.handleLogin}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={this.classes.submit}
+                            >
+                                Log in
+                            </Button>
+                        </form>
+                    </TabContainer>}
+                    {value === 1 && <TabContainer>
+                        <Avatar className={this.classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign Up
+                        </Typography>
+                        <form className={this.classes.form}>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Email Address</InputLabel>
+                                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleChange}/>
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleChange}/>
+                            </FormControl>
+                            <Button
+                                onClick={this.handleSignup}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={this.classes.submit}
+                            >
+                                Sign Up
+                            </Button>
+                        </form>
+                    </TabContainer>}
+                </Paper>
+            </main>
+        );
+    }
+}
 
 export default withStyles(styles)(SignIn);

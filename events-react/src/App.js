@@ -2,11 +2,16 @@ import React, {Component} from 'react';
 
 import './App.css';
 
+import AuthHelperMethods from './components/AuthHelperMethods';
+import withAuth from './components/withAuth';
+
 import Event from "./components/Event";
 import AddEvent from "./components/AddEvent";
 
 
 class App extends Component {
+
+    Auth = new AuthHelperMethods();
 
     constructor(props) {
         super(props);
@@ -16,8 +21,8 @@ class App extends Component {
             category: "",
             place: "",
             address: "",
-            startDate: new Date('2018-08-18T21:11:54'),
-            endDate: new Date('2018-08-19T21:26:35'),
+            startDate: new Date('2018-08-18T20:15:00'),
+            endDate: new Date('2018-08-19T20:15:00'),
             type: "",
         }
         this.addEvent = this.addEvent.bind(this)
@@ -28,6 +33,13 @@ class App extends Component {
 
     componentDidMount() {
         this.getEvents();
+    }
+
+    _handleLogout = () => {
+
+        this.Auth.logout()
+        this.props.history.replace('/login');
+
     }
 
     handleChange = event => {
@@ -91,4 +103,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withAuth(App);
