@@ -104,7 +104,10 @@ app.post('/signup', (req, res) => {
         const INSERT_USER_QUERY = `INSERT INTO USERS(email, password) VALUES ('${email}', '${hash}');`;
         connection.query(INSERT_USER_QUERY, (err, results) => {
             if (err)  {
-                return res.send(err);
+                {
+                    console.log(err);
+                    return res.send(err);
+                }
             }
             else return res.send("Successfully added new user")
         });
